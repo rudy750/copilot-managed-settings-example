@@ -1,0 +1,34 @@
+{
+  "model": "auto",
+  "allowedMcpServers": [
+    {
+      "serverUrl": "https://mcp.contoso.example/shared/*"
+    },
+    {
+      "serverUrl": "https://mcp.contoso.example/security/*"
+    }
+  ],
+  "deniedMcpServers": [
+    {
+      "serverUrl": "https://*.unapproved.contoso.example/*"
+    },
+    {
+      "serverCommand": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/"
+      ]
+    },
+    {
+      "serverCommand": [
+        "npx",
+        "-y",
+        "@contoso/developer-mcp@1.2.3"
+      ]
+    }
+  ],
+  "enabledPlugins": {
+    "security-workflows@contoso-agent-skills": true
+  }
+}

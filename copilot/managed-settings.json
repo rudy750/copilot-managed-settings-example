@@ -1,0 +1,95 @@
+{
+  "model": {
+    "overridable": "auto"
+  },
+  "permissions": {
+    "disableBypassPermissionsMode": "disable",
+    "deny": [
+      "Shell(rm -rf *)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Edit(//etc/**)",
+      "Domain(*.unapproved.contoso.example)"
+    ],
+    "ask": [
+      "Shell(git push *)",
+      "Edit(/.github/workflows/**)",
+      "Domain(api.github.com)"
+    ],
+    "allow": [
+      "Shell(npm test *)",
+      "Shell(git status *)",
+      "Read(/src/**)",
+      "Read(/test/**)",
+      "Domain(registry.npmjs.org)"
+    ]
+  },
+  "enabledPlugins": {},
+  "extraKnownMarketplaces": {
+    "contoso-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "contoso/copilot-agent-skills"
+      },
+      "autoUpdate": true
+    }
+  },
+  "strictKnownMarketplaces": [
+    {
+      "source": "github",
+      "repo": "contoso/copilot-agent-skills"
+    }
+  ],
+  "telemetry": {
+    "enabled": false,
+    "captureContent": false,
+    "lockCaptureContent": true,
+    "serviceName": "github-copilot"
+  },
+  "remoteControl": {
+    "mode": "requireSSO",
+    "githubDotComOrganizations": [
+      "contoso"
+    ]
+  },
+  "allowedMcpServers": {
+    "overridable": [
+      {
+        "serverUrl": "https://mcp.contoso.example/shared/*"
+      }
+    ]
+  },
+  "deniedMcpServers": {
+    "overridable": [
+      {
+        "serverUrl": "https://*.unapproved.contoso.example/*"
+      },
+      {
+        "serverCommand": [
+          "npx",
+          "-y",
+          "@modelcontextprotocol/server-filesystem",
+          "/"
+        ]
+      }
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowBypass": false,
+    "sandboxMcpServers": true,
+    "sandboxLspServers": true,
+    "gitAuth": false,
+    "ghAuth": false,
+    "allowDevToolAccess": true,
+    "userPolicy": {
+      "network": {
+        "allowLocalNetwork": false
+      },
+      "seatbelt": {
+        "keychainAccess": false
+      }
+    }
+  }
+}
