@@ -48,11 +48,22 @@ The baseline file wraps team-overridable values in an `overridable` object:
 {
   "allowedMcpServers": {
     "overridable": [
-      { "serverUrl": "https://mcp.context7.com/mcp" }
+      { "serverUrl": "https://mcp.context7.com/mcp" },
+      { "serverUrl": "https://mcp.deepwiki.com/mcp" },
+      { "serverCommand": ["uvx", "markitdown-mcp"] }
     ]
   }
 }
 ```
+
+Any entry in the baseline `overridable` list is a **default**: it is allowed
+for every enterprise member unless a mapped team file defines its own
+`allowedMcpServers` and omits that entry. Because `developers.json` and
+`security-engineering.json` both define `allowedMcpServers`, they replace the
+baseline list entirely for their members. Members of any other enterprise
+team, or members not in a mapped team, receive the baseline defaults,
+including servers that are not on either team's allowlist, such as DeepWiki
+and MarkItDown.
 
 A mapped team file uses the normal value syntax:
 
@@ -121,6 +132,8 @@ intact while adding team-specific restrictions.
 | [Microsoft Learn](https://github.com/mcp/microsoftdocs/mcp) | Remote documentation server allowed for developer teams. |
 | [Playwright](https://github.com/mcp/microsoft/playwright-mcp) | Local browser automation server allowed for developer teams and denied for security teams. |
 | [Sentry](https://github.com/mcp/getsentry/sentry-mcp) | Remote application diagnostics server allowed for security teams. |
+| [DeepWiki](https://github.com/mcp/cognitionai/deepwiki) | Remote repository documentation and Q&A server allowed as a baseline default, and not on either team's allowlist. |
+| [MarkItDown](https://github.com/mcp/microsoft/markitdown) | Local document-to-Markdown conversion server allowed as a baseline default, and not on either team's allowlist. |
 
 The policies identify the servers but do not configure credentials. Context7
 and Sentry may require users to authenticate when they connect.

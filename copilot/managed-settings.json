@@ -3,6 +3,15 @@
     "overridable": [
       {
         "serverUrl": "https://mcp.context7.com/mcp"
+      },
+      {
+        "serverUrl": "https://mcp.deepwiki.com/mcp"
+      },
+      {
+        "serverCommand": [
+          "uvx",
+          "markitdown-mcp"
+        ]
       }
     ]
   },
