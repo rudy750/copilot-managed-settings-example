@@ -9,8 +9,10 @@ enterprise managed settings. It demonstrates:
 - Additional settings for permissions, models, plugins, remote control,
   telemetry, and the Copilot CLI sandbox.
 
-The values use fictitious organizations, domains, repositories, and team slugs.
-Replace every `contoso` value before using this configuration.
+The MCP examples use servers listed in the
+[GitHub MCP Registry](https://github.com/mcp). Other sample values use fictitious
+organizations, domains, repositories, and team slugs. Replace every `contoso`
+value before using this configuration.
 
 > [!IMPORTANT]
 > A server-managed production configuration belongs in the `copilot/` directory
@@ -46,7 +48,7 @@ The baseline file wraps team-overridable values in an `overridable` object:
 {
   "allowedMcpServers": {
     "overridable": [
-      { "serverUrl": "https://mcp.contoso.example/shared/*" }
+      { "serverUrl": "https://mcp.context7.com/mcp" }
     ]
   }
 }
@@ -57,8 +59,8 @@ A mapped team file uses the normal value syntax:
 ```json
 {
   "allowedMcpServers": [
-    { "serverUrl": "https://mcp.contoso.example/shared/*" },
-    { "serverUrl": "https://mcp.contoso.example/development/*" }
+    { "serverUrl": "https://mcp.context7.com/mcp" },
+    { "serverUrl": "https://learn.microsoft.com/api/mcp" }
   ]
 }
 ```
@@ -110,6 +112,18 @@ Copilot servers, including the built-in GitHub MCP server, cannot be blocked.
 The team files in this repository repeat the baseline deny entries because they
 override `deniedMcpServers`. This keeps the baseline restrictions visible and
 intact while adding team-specific restrictions.
+
+### Registry servers used in this example
+
+| Server | Policy use |
+| --- | --- |
+| [Context7](https://github.com/mcp/upstash/context7) | Shared remote documentation server allowed by the baseline and both teams. |
+| [Microsoft Learn](https://github.com/mcp/microsoftdocs/mcp) | Remote documentation server allowed for developer teams. |
+| [Playwright](https://github.com/mcp/microsoft/playwright-mcp) | Local browser automation server allowed for developer teams and denied for security teams. |
+| [Sentry](https://github.com/mcp/getsentry/sentry-mcp) | Remote application diagnostics server allowed for security teams. |
+
+The policies identify the servers but do not configure credentials. Context7
+and Sentry may require users to authenticate when they connect.
 
 ### Matching details
 
@@ -178,13 +192,15 @@ paths can unintentionally break development tools.
    and enterprise team slugs.
 4. Verify each setting is supported by every Copilot client used in the
    enterprise.
-5. Review local MCP commands as exact arrays; package versions and optional
-   arguments are part of the identity.
-6. Protect changes to `copilot/managed-settings.json`,
+5. Review the selected registry servers and approve them for your environment.
+6. Review local MCP commands as exact arrays; package versions and optional
+   arguments are part of the identity. Consider pinning package versions instead
+   of using `@latest` in production.
+7. Protect changes to `copilot/managed-settings.json`,
    `copilot/team-mappings.json`, and `copilot/teams/` with branch protection and
    administrator or AI-manager review.
-7. Test with a small enterprise team before broad rollout.
-8. Allow up to an hour for supported clients to refresh, or restart the client
+8. Test with a small enterprise team before broad rollout.
+9. Allow up to an hour for supported clients to refresh, or restart the client
    or sign in again to trigger an immediate refresh.
 
 ## References
@@ -192,6 +208,7 @@ paths can unintentionally break development tools.
 - [Enterprise managed settings reference](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/enterprise-administrators/enterprise-managed-settings)
 - [Getting started with enterprise-managed settings](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started)
 - [Overriding enterprise-managed settings for teams](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/override-settings-for-teams)
+- [GitHub MCP Registry](https://github.com/mcp)
 
 GitHub may add settings or change client support over time. Check the current
 reference before deploying this sample.

@@ -55,7 +55,7 @@
   "allowedMcpServers": {
     "overridable": [
       {
-        "serverUrl": "https://mcp.contoso.example/shared/*"
+        "serverUrl": "https://mcp.context7.com/mcp"
       }
     ]
   },
