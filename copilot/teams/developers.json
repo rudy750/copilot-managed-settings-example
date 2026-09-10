@@ -2,16 +2,15 @@
   "model": "auto",
   "allowedMcpServers": [
     {
-      "serverUrl": "https://mcp.contoso.example/shared/*"
+      "serverUrl": "https://mcp.context7.com/mcp"
     },
     {
-      "serverUrl": "https://mcp.contoso.example/development/*"
+      "serverUrl": "https://learn.microsoft.com/api/mcp"
     },
     {
       "serverCommand": [
         "npx",
-        "-y",
-        "@contoso/developer-mcp@1.2.3"
+        "@playwright/mcp@latest"
       ]
     }
   ],
