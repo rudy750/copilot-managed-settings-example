@@ -5,11 +5,9 @@
 This repository is a public, non-production example of GitHub Copilot
 enterprise managed settings. It demonstrates:
 
-- A baseline `managed-settings.json` policy.
-- MCP server allow and deny lists.
+- A baseline `managed-settings.json` policy that configures only MCP server
+  allow and deny lists.
 - Different MCP policies for enterprise teams.
-- Additional settings for permissions, models, plugins, remote control,
-  telemetry, and the Copilot CLI sandbox.
 
 The MCP examples use servers listed in the
 [GitHub MCP Registry](https://github.com/mcp). Other sample values use fictitious
@@ -35,7 +33,7 @@ copilot/
 
 | File | Purpose |
 | --- | --- |
-| `copilot/managed-settings.json` | Defines the enterprise-wide defaults and marks selected keys as overridable by enterprise teams. |
+| `copilot/managed-settings.json` | Defines the enterprise-wide MCP allow and deny lists and marks them as overridable by enterprise teams. |
 | `copilot/team-mappings.json` | Maps team settings files to enterprise team slugs. |
 | `copilot/teams/developers.json` | Gives developer teams access to approved remote and local MCP servers. |
 | `copilot/teams/security-engineering.json` | Gives security teams access to approved security MCP servers while blocking local MCP processes. |
@@ -140,50 +138,6 @@ and Sentry may require users to authenticate when they connect.
   allowlist is their intersection.
 - When multiple managed settings sources define a denylist, the effective
   denylist is their union.
-
-## Additional managed settings
-
-The baseline demonstrates several settings beyond MCP governance.
-
-| Setting | What it does |
-| --- | --- |
-| `model` | Sets the default model for new conversations. `"auto"` enables automatic model selection. Users can still choose another allowed model for an individual conversation. |
-| `permissions.disableBypassPermissionsMode` | Setting this to `"disable"` prevents users from enabling allow-all or YOLO-style permission bypass. |
-| `permissions.deny` | Blocks matching shell commands, file operations, or domains. Deny has the highest permission-rule precedence. |
-| `permissions.ask` | Requires fresh human approval every time a matching operation is requested. |
-| `permissions.allow` | Allows matching operations without a prompt. If managed rules or an allowlist exist, unmatched supported operations require approval. |
-| `enabledPlugins` | Requires a plugin to be enabled with `true`, or disabled with `false`, using `PLUGIN@MARKETPLACE` keys. |
-| `extraKnownMarketplaces` | Adds enterprise-approved plugin marketplaces. `autoUpdate` controls whether clients must refresh and update plugins from that marketplace. |
-| `strictKnownMarketplaces` | Restricts plugin installation to listed marketplaces. An empty array locks plugin installation down completely. |
-| `telemetry` | Configures OpenTelemetry export. Keep `captureContent` disabled unless the enterprise has explicitly approved collection of prompts and responses. |
-| `remoteControl` | Controls whether sessions hosted on a device can be remotely controlled. `requireSSO` limits control to clients authorized for listed GitHub organizations. |
-| `sandbox` | Enforces minimum Copilot CLI sandbox restrictions for command execution, local MCP servers, language servers, files, network access, and credentials. |
-
-Permission selectors in the example have these meanings:
-
-| Selector | Matches |
-| --- | --- |
-| `Shell(...)` | Shell commands. A command followed by ` *` matches that command prefix. |
-| `Read(...)` | File reads. `/` means the workspace root, `~/` the home directory, and `//` the filesystem root. |
-| `Edit(...)` | File writes, using the same path roots and glob behavior as `Read`. |
-| `Domain(...)` | Network origins. `*.example.com` matches the domain and its subdomains. |
-
-Permission precedence is `deny` > `ask` > `allow`.
-
-## Settings intentionally not enabled
-
-The example defines an approved plugin marketplace but does not automatically
-enable a plugin. Add entries to `enabledPlugins` only after validating the
-plugin name and marketplace.
-
-Telemetry export is disabled. To enable it, provide a real OTLP endpoint and
-choose either `http/json` or `http/protobuf`. Do not commit collector
-credentials to a repository; distribute sensitive headers through an approved
-configuration mechanism.
-
-The sandbox policy does not include custom filesystem grant paths. Managed path
-lists compare exact strings with user-configured grants, so copying placeholder
-paths can unintentionally break development tools.
 
 ## Deployment checklist
 

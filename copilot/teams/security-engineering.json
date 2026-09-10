@@ -1,5 +1,4 @@
 {
-  "model": "auto",
   "allowedMcpServers": [
     {
       "serverUrl": "https://mcp.context7.com/mcp"
@@ -26,8 +25,5 @@
         "@playwright/mcp@latest"
       ]
     }
-  ],
-  "enabledPlugins": {
-    "security-workflows@contoso-agent-skills": true
-  }
+  ]
 }
