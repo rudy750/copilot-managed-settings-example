@@ -5,11 +5,9 @@
 Este repositorio es un ejemplo público, no productivo, de la configuración
 administrada empresarial de GitHub Copilot. Demuestra:
 
-- Una política base de `managed-settings.json`.
-- Listas de permitidos y denegados de servidores MCP.
+- Una política base de `managed-settings.json` que configura únicamente las
+  listas de permitidos y denegados de servidores MCP.
 - Diferentes políticas de MCP para equipos empresariales.
-- Configuraciones adicionales para permisos, modelos, plugins, control remoto,
-  telemetría y el sandbox de Copilot CLI.
 
 Los valores utilizan organizaciones, dominios, repositorios y slugs de equipo
 ficticios. Reemplaza cada valor `contoso` antes de usar esta configuración.
@@ -34,7 +32,7 @@ copilot/
 
 | Archivo | Propósito |
 | --- | --- |
-| `copilot/managed-settings.json` | Define los valores predeterminados de toda la empresa y marca las claves seleccionadas como sobrescribibles por los equipos empresariales. |
+| `copilot/managed-settings.json` | Define las listas de permitidos y denegados de MCP de toda la empresa y las marca como sobrescribibles por los equipos empresariales. |
 | `copilot/team-mappings.json` | Asigna archivos de configuración de equipo a slugs de equipos empresariales. |
 | `copilot/teams/developers.json` | Otorga a los equipos de desarrolladores acceso a servidores MCP remotos y locales aprobados. |
 | `copilot/teams/security-engineering.json` | Otorga a los equipos de seguridad acceso a servidores MCP de seguridad aprobados mientras bloquea los procesos MCP locales. |
@@ -133,53 +131,6 @@ del equipo.
   permitidos, la lista efectiva es su intersección.
 - Cuando varias fuentes de configuración administrada definen una lista de
   denegados, la lista efectiva es su unión.
-
-## Configuraciones administradas adicionales
-
-El ejemplo base demuestra varias configuraciones más allá de la gobernanza de
-MCP.
-
-| Configuración | Qué hace |
-| --- | --- |
-| `model` | Establece el modelo predeterminado para nuevas conversaciones. `"auto"` habilita la selección automática de modelo. Los usuarios aún pueden elegir otro modelo permitido para una conversación individual. |
-| `permissions.disableBypassPermissionsMode` | Establecer esto en `"disable"` evita que los usuarios habiliten el modo de omisión de permisos tipo permitir-todo o YOLO. |
-| `permissions.deny` | Bloquea comandos de shell, operaciones de archivo o dominios coincidentes. La denegación tiene la mayor precedencia de reglas de permiso. |
-| `permissions.ask` | Requiere una aprobación humana nueva cada vez que se solicita una operación coincidente. |
-| `permissions.allow` | Permite operaciones coincidentes sin una solicitud. Si existen reglas administradas o una lista de permitidos, las operaciones admitidas no coincidentes requieren aprobación. |
-| `enabledPlugins` | Requiere que un plugin esté habilitado con `true`, o deshabilitado con `false`, usando claves `PLUGIN@MARKETPLACE`. |
-| `extraKnownMarketplaces` | Agrega mercados de plugins aprobados por la empresa. `autoUpdate` controla si los clientes deben actualizar y refrescar los plugins de ese mercado. |
-| `strictKnownMarketplaces` | Restringe la instalación de plugins a los mercados listados. Un array vacío bloquea por completo la instalación de plugins. |
-| `telemetry` | Configura la exportación de OpenTelemetry. Mantén `captureContent` deshabilitado a menos que la empresa haya aprobado explícitamente la recopilación de prompts y respuestas. |
-| `remoteControl` | Controla si las sesiones alojadas en un dispositivo pueden controlarse de forma remota. `requireSSO` limita el control a clientes autorizados para las organizaciones de GitHub listadas. |
-| `sandbox` | Aplica restricciones mínimas del sandbox de Copilot CLI para la ejecución de comandos, servidores MCP locales, servidores de lenguaje, archivos, acceso a la red y credenciales. |
-
-Los selectores de permisos en el ejemplo tienen estos significados:
-
-| Selector | Coincide con |
-| --- | --- |
-| `Shell(...)` | Comandos de shell. Un comando seguido de ` *` coincide con ese prefijo de comando. |
-| `Read(...)` | Lecturas de archivos. `/` significa la raíz del espacio de trabajo, `~/` el directorio de inicio y `//` la raíz del sistema de archivos. |
-| `Edit(...)` | Escrituras de archivos, usando las mismas raíces de ruta y comportamiento de comodín que `Read`. |
-| `Domain(...)` | Orígenes de red. `*.example.com` coincide con el dominio y sus subdominios. |
-
-La precedencia de permisos es `deny` > `ask` > `allow`.
-
-## Configuraciones intencionalmente no habilitadas
-
-El ejemplo define un mercado de plugins aprobado pero no habilita
-automáticamente ningún plugin. Agrega entradas a `enabledPlugins` solo
-después de validar el nombre del plugin y el mercado.
-
-La exportación de telemetría está deshabilitada. Para habilitarla,
-proporciona un endpoint OTLP real y elige `http/json` o `http/protobuf`. No
-confirmes credenciales de recolector en un repositorio; distribuye
-encabezados sensibles mediante un mecanismo de configuración aprobado.
-
-La política de sandbox no incluye rutas de concesión de sistema de archivos
-personalizadas. Las listas de rutas administradas comparan cadenas exactas
-con las concesiones configuradas por el usuario, por lo que copiar rutas de
-marcador de posición puede romper involuntariamente las herramientas de
-desarrollo.
 
 ## Lista de verificación de implementación
 
