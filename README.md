@@ -1,3 +1,5 @@
+**[English](README.md)** | [Español](README.es.md)
+
 # GitHub Copilot enterprise managed settings example
 
 This repository is a public, non-production example of GitHub Copilot
