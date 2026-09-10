@@ -9,8 +9,10 @@ administrada empresarial de GitHub Copilot. Demuestra:
   listas de permitidos y denegados de servidores MCP.
 - Diferentes políticas de MCP para equipos empresariales.
 
-Los valores utilizan organizaciones, dominios, repositorios y slugs de equipo
-ficticios. Reemplaza cada valor `contoso` antes de usar esta configuración.
+Los ejemplos de MCP utilizan servidores listados en el
+[Registro de MCP de GitHub](https://github.com/mcp). Otros valores de ejemplo
+utilizan organizaciones, dominios, repositorios y slugs de equipo ficticios.
+Reemplaza cada valor `contoso` antes de usar esta configuración.
 
 > [!IMPORTANT]
 > Una configuración de producción administrada por el servidor pertenece al
@@ -49,19 +51,31 @@ El archivo base envuelve los valores sobrescribibles por equipo en un objeto
 {
   "allowedMcpServers": {
     "overridable": [
-      { "serverUrl": "https://mcp.contoso.example/shared/*" }
+      { "serverUrl": "https://mcp.context7.com/mcp" },
+      { "serverUrl": "https://mcp.deepwiki.com/mcp" },
+      { "serverCommand": ["uvx", "markitdown-mcp"] }
     ]
   }
 }
 ```
+
+Cualquier entrada en la lista base `overridable` es un **valor
+predeterminado**: se permite para todos los miembros de la empresa a menos que
+un archivo de equipo asignado defina su propio `allowedMcpServers` y omita esa
+entrada. Como `developers.json` y `security-engineering.json` definen ambos
+`allowedMcpServers`, reemplazan por completo la lista base para sus miembros.
+Los miembros de cualquier otro equipo empresarial, o los que no pertenecen a
+un equipo asignado, reciben los valores predeterminados base, incluidos
+servidores que no están en la lista de permitidos de ningún equipo, como
+DeepWiki y MarkItDown.
 
 Un archivo de equipo asignado utiliza la sintaxis de valor normal:
 
 ```json
 {
   "allowedMcpServers": [
-    { "serverUrl": "https://mcp.contoso.example/shared/*" },
-    { "serverUrl": "https://mcp.contoso.example/development/*" }
+    { "serverUrl": "https://mcp.context7.com/mcp" },
+    { "serverUrl": "https://learn.microsoft.com/api/mcp" }
   ]
 }
 ```
@@ -117,6 +131,21 @@ base porque sobrescriben `deniedMcpServers`. Esto mantiene visibles e
 intactas las restricciones base mientras se agregan restricciones específicas
 del equipo.
 
+### Servidores del registro utilizados en este ejemplo
+
+| Servidor | Uso en la política |
+| --- | --- |
+| [Context7](https://github.com/mcp/upstash/context7) | Servidor remoto de documentación compartido, permitido por la base y ambos equipos. |
+| [Microsoft Learn](https://github.com/mcp/microsoftdocs/mcp) | Servidor remoto de documentación permitido para los equipos de desarrolladores. |
+| [Playwright](https://github.com/mcp/microsoft/playwright-mcp) | Servidor local de automatización de navegador permitido para los equipos de desarrolladores y denegado para los equipos de seguridad. |
+| [Sentry](https://github.com/mcp/getsentry/sentry-mcp) | Servidor remoto de diagnóstico de aplicaciones permitido para los equipos de seguridad. |
+| [DeepWiki](https://github.com/mcp/cognitionai/deepwiki) | Servidor remoto de documentación y preguntas y respuestas de repositorios, permitido como valor predeterminado base y ausente en la lista de permitidos de ambos equipos. |
+| [MarkItDown](https://github.com/mcp/microsoft/markitdown) | Servidor local de conversión de documentos a Markdown, permitido como valor predeterminado base y ausente en la lista de permitidos de ambos equipos. |
+
+Las políticas identifican los servidores, pero no configuran credenciales.
+Context7 y Sentry pueden requerir que los usuarios se autentiquen al
+conectarse.
+
 ### Detalles de coincidencia
 
 - `serverName` es una coincidencia de etiqueta exacta y distingue mayúsculas
@@ -156,6 +185,7 @@ del equipo.
 - [Referencia de configuración administrada empresarial](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/enterprise-administrators/enterprise-managed-settings)
 - [Introducción a la configuración administrada empresarial](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/get-started)
 - [Sobrescribir la configuración administrada empresarial para equipos](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/use-managed-settings/override-settings-for-teams)
+- [Registro de MCP de GitHub](https://github.com/mcp)
 
 GitHub puede agregar configuraciones o cambiar el soporte de clientes con el
 tiempo. Consulta la referencia actual antes de implementar este ejemplo.
